@@ -38,6 +38,21 @@ parsing the same apps quickly.
 - `Overview → Accumulation 1` shows the balance + "As at <date>". Contributions listed with
   date, `+$amt`, and type (Member Voluntary Before-Tax / Employer Contribution).
 
+## Two properties (as of 2026-08)
+- **Property 1 — current residence**: the one whose home-loan balance shows in AMP
+  (ProfVarPI, family-owned, both owners' names, ~A$1,089,259.68 debt).
+- **Property 2 — family 1BR condo**: value A$614,000, 0.9% deposit paid = A$5,526,
+  remaining A$608,474, **no loan yet** → record as full-value ASSET with no debt.
+  Owner = ครอบครัว (confirmed; initially mis-tagged Nat — always confirm property owner).
+
+## Net-worth table supplied by user (in THB, computed externally)
+Supplied as rows per owner + totals. Two total rows: "Unrealised without debt"
+(Nat+Perth+Family sum) and "Unrealised with debt" (after subtracting total debt). The
+difference between the two rows = total debt subtracted. Currency was THB, not AUD — always
+confirm the unit before recording a computed summary.
+
+2026 (THB): Nat ฿8,995,330 · Perth ฿46,984,519 · Family ฿19,963,943 · without-debt ฿75,943,792 · with-debt ฿37,661,502.
+
 ## Currency conversion (AUD → THB)
 - Open endpoint (no key): `https://open.er-api.com/v6/latest/AUD` → `rates.THB`.
 - Cross-check with a second source (e.g. frankfurter.app needs `/latest?from=AUD&to=THB`).
