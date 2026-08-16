@@ -87,6 +87,16 @@ money is truly spent or holds value**:
   premiums. Recommend a separate "ใครงบ/แม่งบ" budget bucket and phased plan rather than
   touching the savings-type policies.
 
+## Additional-property purchase and rental-yield analysis
+When the user asks how much to borrow for a second/investment property:
+1. Clarify or state the assumption that the quoted amount is the **purchase price**, not the loan amount. If rent is quoted weekly, annualise it as `weekly_rent × 52`; show gross yield as `annual_rent ÷ purchase_price`.
+2. Do not treat gross rent as spendable cash. Stress-test at least 50 rental weeks/year and subtract a clearly labelled allowance for strata/body corporate, council/water, landlord insurance, property management, maintenance, vacancy, and possible special levies. Apartment strata and special-levy risk should be highlighted.
+3. Compare multiple LVRs (usually 50%, 60%, 70%) and interest-rate scenarios (base around the current investor rate and a higher stress rate). For interest-only screening, annual interest is `loan × rate`; say explicitly that principal-and-interest repayments will produce worse cash flow.
+4. Present the result as pre-tax cash flow, not guaranteed profit. Mention that tax treatment/negative gearing and depreciation need an Australian tax adviser; lender serviceability is separate from actual cash flow.
+5. Include upfront acquisition costs: NSW transfer duty, conveyancing/inspection/loan costs, and a repair/special-levy buffer. Do not imply that offset cash is free: withdrawing from an offset may increase interest on the existing home loan and may have tax/security implications.
+6. Give a cautious recommendation range rather than a precise approval claim. For a $600K apartment renting at $600/week (5.2% gross yield), a 50–60% LVR is the sensible initial comparison; do not recommend 70–80% without actual strata, existing-debt, serviceability, and buffer data. Ask for those figures before finalising.
+7. Quote sources for current rate and NSW duty when browsing is available, and label all numerical assumptions/date. Use code for arithmetic and reconcile totals.
+
 ## Pitfalls
 - **Do NOT assume currency.** A user may quote different figures in different currencies on
   the same day: bank/investment apps in AUD (AMP, Revolut, CommSec, Betashares, UniSuper), but
@@ -135,3 +145,5 @@ money is truly spent or holds value**:
   CommSec Pocket, Betashares, UniSuper) and the owner-classification rule.
 - `references/nat-thailand-committed-expenses.md` — Nat's recurring annual Thai line items and
   the sunk-vs-value reframe (health ฿20K, CI ฿25K, endowment ฿25K, mother ฿180K/yr = ฿250K/yr).
+- `references/investment-property-screening.md` — conservative Australian second-property
+  LVR, rent-yield, expense, interest-rate, and cash-flow screening template.

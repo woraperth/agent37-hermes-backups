@@ -44,6 +44,14 @@ When the user asks for *today's* schedule or for *tasks* (not just calendar even
    - 📋 **steps to accomplish** (lift the numbered checklist from the task description + vault run-sheet)
    - ▶️ **1 action to start now** (the smallest concrete first step)
 
+## "What's still left today?" (current-status / "just finished dinner" pattern)
+When the user asks *"what's on my schedule / what's left tonight / any unfinished items"* AFTER the day has started (mid-afternoon, dinnertime, evening) — NOT a fresh full-day summary — the useful answer is a **status split by current local time**, not a replay of the whole day:
+1. **Resolve the current Sydney time** with `TZ=Australia/Sydney date "+%H:%M %A %Y-%m-%d"`. This is the dividing line for "left tonight."
+2. **Re-pull the day with `filters: {exclude_all_day: false}` AND `completed_mode: "with_completed"`** — the default (omitted `completed_mode`) hides items already marked done, but here you NEED the done set to tell the user "you already cleared X, Y, Z — good progress." Read `done`/`done_at` on each task.
+3. **Split into three buckets** in the reply: ✅ **done** (items already finished — briefly acknowledge these so the user sees they're NOT outstanding), 🔶 **overdue** (`is_overdue: true` — planned earlier, not done; flag HIGH ones), and 📋 **upcoming** (`datetime` > current time). Note any items whose `datetime` has passed but are NOT flagged overdue (slipped/backlog).
+4. **Anchor on the heavy item first.** A 3-hour block that should've started earlier (e.g. Vibe Code slides 19:00) realistically eats the rest of the evening — tell the user what's genuinely feasible vs what silently won't fit, and offer to re-order in Akiflow or open time slots if the tail collides. Small overdue items (30m) are quick wins to clear first UNLESS they're genuinely blocked (e.g. "waiting for SV Support") — offer to skip those.
+
+
 ## Scheduled daily briefing (cron / posting form)
 Perth runs this as a **daily 7am Sydney cron job** delivered into Discord (#dev). Format preference from a real correction: the briefing posted flat was too long — they want it **thread-shaped and summary-led**.
 - **Sydney "today"** — container is UTC; compute the day with `TZ=Australia/Sydney date "+%Y-%m-%d %A"` and use THAT as the query date (not the UTC `date`, which is the prior day). Sydney = AEST (UTC+10) in Aug–Sep, AEDT (UTC+11) in Oct–Mar daylight-saving.
@@ -57,6 +65,16 @@ Perth runs this as a **daily 7am Sydney cron job** delivered into Discord (#dev)
 - **Workout / habit tasks: NO card at all (explicit user rule, refined twice).** Perth said to skip the whole 📌 Context / 📱 · 📋 · ▶️ block for workout tasks, then clarified: *"no context, device, steps, start now thing. But for other non-workout tasks, I still want to see it."* So workout (🏋️), Daily Shutdown (🌙), and similar simple GOAL/habit items render as a **bare line with ONLY the name + time — nothing else** (no `· mobile, just go`, no device tag, no description): e.g. `**🏋️ Workout** · 09:00` and `**🌙 Daily Shutdown** · 23:15`. Do NOT inflate them, and do NOT append any "· mobile…" tag. Full 4-part cards remain for ALL other (non-workout) tasks — that contrast is the point.
 - **Strip agent commentary from the delivered message (hard rule)** — the model frequently wraps its cron output in process narration that gets POSTED verbatim (e.g. "I have all the data I need… now let me write the final briefing… that's the full briefing", and even a char-count self-check "The briefing is complete, verified at N characters…"). The cron delivery is the model's final text as-is. The job prompt MUST state: *the entire final response is what the user reads — no preamble, no process notes, no trailing "that's all" commentary; output only the briefing*. Plain "no meta-commentary" STILL leaked one run, so upgrade to a byte-level guardrail: **the very first character of output must be the `#` of the `# 🗓️ …` date header** — never a do-what-I-did checklist or a verification/char-count line (see `references/daily-discord-briefing.md`). Recheck the last run's output file (`~/.hermes/cron/output/<jobid>/<ts>.md`) for framing lines around the real briefing before trusting a delivery.
 - **Composio Discord gotcha (for real OP + replies)** — the `discord` toolkit (user's personal account) only exposes read tools (`DISCORD_LIST_MY_GUILDS`, etc.). The posting/thread tools (`DISCORDBOT_CREATE_MESSAGE`, `DISCORDBOT_CREATE_THREAD`, `DISCORDBOT_LIST_GUILD_CHANNELS`) live in the separate **`discordbot` toolkit**, which requires a Discord **bot token** connection — a user account connection will NOT enable writes. If a user says they "installed a Discord Composio integration" but only a personal-account connection is active, they still need the bot-toolkit auth link. The Perth Hermes guild id is `1537787895136649298`; #dev channel is `1537826281142484992`.
+
+## Capability boundary before recommending "remote prep"
+When the user is away from home and asks what can be prepared, do not equate a task being intellectually preparable with being operationally actionable. First check whether the task requires access to a specific external system or website (e.g. tax portals, brokerage websites, New Zenler, course platforms, account dashboards). If the agent lacks that authenticated access, say so plainly and do not recommend the task as remotely doable.
+
+Classify candidates:
+- **Operationally blocked:** requires logging into an unavailable system or performing actions inside it. Defer until the user has access.
+- **Draftable:** the agent can prepare a written draft, checklist, workflow, or decision memo using grounded vault/task context, while clearly separating preparation from the user's final publish/execute step.
+- **Fully actionable:** the agent has the required tool and authenticated access; only call this remotely doable after verifying access.
+
+For course migration tasks, access to notes or a migration checklist is not a substitute for New Zenler access. Do not claim to prepare the migration itself; at most, offer a checklist or draft instructions and label the platform execution as user-owned.
 
 ## Scheduling tradeoffs & modifying the schedule (reschedule / delete)
 When the user asks about *fitting a new time-critical block in*, or wants to *move/cancel* existing items, this is a separate workflow from summarizing (read → reason → act):
@@ -80,7 +98,7 @@ Pitfalls: only change items the user explicitly points at ("this one"); when a t
 
 ## Pitfalls & Tips
 - **Date format** – Akiflow expects `YYYY-MM-DD` (zero‑padded).
-- **Perth "today" off‑by‑one** – The container `date "+%Y-%m-%d"` resolves to **UTC**, which is the *previous* day relative to Perth08's local day (Perth = UTC+8). When the user says "today (Saturday)" but `date` prints Friday, trust the **user's local Perth day** (container date + 1) and query Akiflow for that date — NOT the container date. Also pass the user's day to the diary (e.g. `Diary/2026-08-15.md`) so secretary/enrichment reads match.
+- **Perth "today" off‑by‑one** – The container `date "+%Y-%m-%d"` resolves to **UTC**, which is the *previous* day relative to Perth's local day. **Perth lives in Sydney** (Australia, not US — he corrected the old "NYC/P lower-case C" profile to Sydney on 2026-08-15), so his local tz is **AEST (UTC+10)** in Aug–Sep / **AEDT (UTC+11)** in Oct–Mar daylight-saving. Compute his local day with `TZ=Australia/Sydney date "+%Y-%m-%d %A"` and use THAT as the Akiflow query date and for the diary (e.g. `Diary/<Sydney-date>.md`) — not the container UTC date nor the older Perth=UTC+8 assumption. When the user says "today (Saturday)" but `date` prints Friday, trust the **user's local Sydney day**. Sydney vs the container can differ by up to two calendar positions during AEDT; always resolve via `TZ=Australia/Sydney date`, never assume.
 - **Timezone** – Dates are interpreted in the user's local timezone; no offset needed.
 - **Filtering** – To show only events with guests, set `filters.with_guests_only` to `true`.
 - **Avoid redundant `tool_describe`** – Assume the tool schema is known; call the tool directly.
