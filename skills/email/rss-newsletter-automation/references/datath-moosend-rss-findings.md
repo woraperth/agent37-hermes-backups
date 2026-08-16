@@ -23,6 +23,13 @@ Recommended name: `[Newsletter] YYYY-MM-DD — <article title>`.
 
 Keep campaign labels separate from subscriber tags and custom fields. Use mailing lists or segments to control audience; use subscriber tags/custom fields to describe contacts.
 
-## Operational boundary
+## Moosend discovery and draft workflow
 
-The working session only verified the public feed and updated a local workflow draft. It did not connect to Moosend, create a campaign, test an email, schedule delivery, or send anything.
+- The initial `GET /lists.json` response returned only 10 lists. The documented complete-list endpoint is `GET /lists/{Page}/{PageSize}.json`; `GET /lists/1/100.json` returned 54 active lists and page 2 was empty.
+- The general audience was `DataTH Blog Subscribers` with 7,031 active members at verification time. Do not confuse it with course-interest, student, or webinar-registrant lists.
+- Approved sender observed: `perth@datath.com` (sender name: `แอดเพิร์ธ Data Science ชิลชิล`).
+- A previous branded DataTH campaign contained two image elements and the `#unsubscribeLink#` token. Its HTML had four responsive copies of the main text block; all four must be replaced when reusing the layout.
+- Directly creating/updating large HTML through the API was rejected in this account. The working approach was: fetch the prior campaign HTML, replace all four content blocks while preserving the outer template, host the non-sensitive HTML at a public `WebLocation`, create a new draft using `WebLocation`, and re-fetch to verify.
+- The verified draft checks were: status `0`, no `ScheduledFor`, no `DeliveredOn`, target mailing-list ID, sender/reply-to, article URL, image count, author string `แอดเพิร์ธ`, and unsubscribe token.
+- Leave prior drafts in place unless the user explicitly confirms deletion; draft cleanup is a separate destructive action.
+- No test, schedule, or send endpoint should be called during this workflow.

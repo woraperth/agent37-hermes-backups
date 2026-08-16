@@ -36,8 +36,10 @@ Use when a user wants new blog posts converted into AI-assisted email newsletter
    - Require the AI output to be grounded only in retrieved article content.
 
 4. **Generate the newsletter**
-   - Produce subject, preview text, short opening, concise summary, practical takeaways when useful, and a read-more link.
-   - Match the user's established language and editorial voice; avoid generic AI marketing copy and exaggerated claims.
+   - Produce subject, preview text, short opening, a concise teaser, an unresolved question/tension, and a read-more link.
+   - The newsletter must **sell the click, not replace the article**: reveal the problem and at most one intriguing insight, but do not reveal the article's main argument, framework, or conclusion.
+   - Match the user's established language and editorial voice; avoid generic AI marketing copy, exaggerated claims, and clickbait.
+   - For Thai DataTH copy, refer to the author as **`แอดเพิร์ธ` every time**; never use `Perth`, `เพิร์ธ`, or a bare author name.
    - Keep the original article URL unchanged.
    - Return `NEEDS_REVIEW` when the article is ambiguous, promotional, sensitive, or lacks enough content.
 
@@ -60,7 +62,21 @@ For Moosend-style providers, use internal campaign labels such as `Newsletter`, 
 
 Do not use subscriber tags merely to classify campaigns. Use lists or segments when the audience must differ.
 
-## Safety and access boundaries
+## Provider discovery and branded-template workflow
+
+For Moosend, do not assume the first unpaged list response is complete. Use the documented paged endpoint `/lists/{Page}/{PageSize}.json` and inspect every page. Confirm the exact target list by name and active-member count; for DataTH, the general audience was found as `DataTH Blog Subscribers`, not among the initial 10-item response.
+
+When the user has an existing branded campaign template:
+
+1. Fetch the last suitable campaign with `/campaigns/{CampaignID}/view.json`.
+2. Preserve its outer HTML, logo/image elements, typography, spacing, responsive copies, and unsubscribe footer.
+3. Replace only the editable content blocks. Templates may contain multiple responsive copies of the same block; update all matching copies.
+4. Prefer Moosend's documented `WebLocation` creation path for large branded HTML. Directly posting large `HTMLContent` can be rejected; host the public, non-sensitive HTML and create the draft with `WebLocation`.
+5. Re-fetch the created draft and verify sender, audience, subject, status, article link, image count, and unsubscribe token.
+6. Never delete an earlier draft merely to clean up duplicates without immediate user confirmation.
+
+The generated template should retain Moosend's `#unsubscribeLink#` token and must never be tested, scheduled, or sent as part of draft creation.
+
 
 - Verify the provider account, approved sender, target list, and campaign label before creating a provider draft.
 - Keep API keys in environment variables; never expose them in URLs, logs, notes, or chat.

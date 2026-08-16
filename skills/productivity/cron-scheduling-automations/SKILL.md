@@ -65,8 +65,25 @@ When a script reads note frontmatter (to find `processed:`, classify, extract su
 - Extract the *body* from `text[match.end():]`, NOT `text.splitlines()[:N]` — slicing the raw text keeps the YAML keys, so summaries come back as `processed: false` instead of real content.
 - Treat a missing `processed:` line as `false`/unprocessed so fresh captures are never skipped.
 
-### 4. Scope toolsets tightly
+### 4a. RSS change-triggered draft automations
+
+For recurring RSS-to-draft workflows, combine a weekly schedule with `monitor_url` so the agent runs only when the feed bytes change. In the prompt, require stable deduplication using the feed item's `guid` (fallback: canonical link) and a persistent state file updated only after successful draft creation. For external campaign systems, keep the job draft-only: never test, schedule, send, delete, or mutate subscribers/lists. Deliver a concise notification to the explicitly requested parent channel, not the thread that created the job. Seed the state with any manually created sample article so the first scheduled check cannot duplicate it.
+
 Add `enabled_toolsets` to match exactly what the job needs (e.g. `["terminal", "file"]` for a vault-scanning digest). Shrinking the toolset cuts token overhead and reduces the blast radius of an unattended run.
+
+### 4b. Convert deterministic repository maintenance to `no_agent`
+Git pulls, vault syncs, backup mirroring, and commit/push workflows do not need an LLM. Implement them as tested shell scripts and attach them with `script=<name>` plus `no_agent=True`. Keep the prompt as a short description only; it is ignored for execution. Make successful runs silent and let failures surface through the script's non-zero exit/stderr. Use `git pull --ff-only`, explicit absolute paths, and commit/push only when `git status --porcelain` is non-empty. This avoids paying for repeated context windows and also avoids provider/model drift failures on unattended maintenance jobs. Validate the script once manually, then read back the cron listing to confirm `Mode: no-agent` and `last_status: ok`.
+
+### 4c. Bound context for LLM-driven digests
+A short cron prompt can still produce very high token usage: the expensive part is often cumulative prompt/context tokens across repeated tool calls, not the prompt text or final response. For schedule + vault briefings:
+
+- Fetch the primary schedule/API source exactly once per run; never re-fetch it while drafting.
+- Resolve the local date once and reuse it throughout the run.
+- Select/prioritise tasks before vault enrichment; do not enrich every low-value or recurring item.
+- For each important task, perform at most one targeted search and read at most one relevant note. Never scan the whole vault or retry broad searches after a miss.
+- Prefer a deterministic preprocessor/script that emits a compact schedule + context bundle, then let the LLM format that bundle. If a script cannot access the source API, enforce the same bounds in the prompt and keep only the minimum toolsets (usually `terminal` + `file`; omit `web` unless the digest genuinely needs current web data).
+- Keep the delivered output under the platform limit, but do not confuse output length with token cost: short Discord messages can still have huge input usage if tool history is repeatedly resent.
+- Measure before/after from the usage audit by grouping `prompt_tokens`, `completion_tokens`, and `total_tokens` by job ID and date. Treat clustered records as multiple model calls within a run, not automatically as separate user-visible briefings.
 
 ### 5. Pin LLM-driven jobs against inference-config drift
 Hermes protects unattended jobs from accidentally spending under a changed global provider/model. If an LLM-driven job was created with an older or implicit configuration, a later global model change can cause it to be skipped as unpinned.
@@ -85,6 +102,8 @@ A concise reproduction/verification note is in `references/inference-config-drif
 2. Compute the UTC cron expression from the local target (see rule 1). Dial it by hand, don't eyeball a near-match.
 3. Decide the **delivery destination** — thread id, channel, or `local` (rule 2).
 4. Draft a **self-contained prompt** (the job runs in a fresh session with no chat context): state the goal, the exact source paths, the read-only constraint, and the desired output shape.
+   - Keep the durable workflow/specification in a version-controlled file and keep the cron prompt focused on execution, safety, source paths, and delivery. To prevent drift, explicitly tell the job to read the workflow file each run (or update both immediately when a user changes a rule).
+   - For content automations, separate the human-facing workflow (rules, examples, formatting decisions) from the live automation (schedule, deduplication, API calls, and notification).
 5. Set `enabled_toolsets` to the minimum.
 6. Create with `cronjob action=create`, then read back `next_run_at` and sanity-check the local-time interpretation before declaring it done.
 
