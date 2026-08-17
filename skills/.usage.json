@@ -5,14 +5,14 @@
     "created_by": "agent",
     "last_patched_at": "2026-08-16T03:51:16.648787+00:00",
     "last_reused_patch_generation": 31,
-    "last_used_at": "2026-08-16T04:29:57.142827+00:00",
-    "last_viewed_at": "2026-08-16T04:27:06.016270+00:00",
+    "last_used_at": "2026-08-17T00:26:09.382434+00:00",
+    "last_viewed_at": "2026-08-17T00:26:09.379625+00:00",
     "patch_count": 36,
     "patch_generation": 31,
     "pinned": false,
     "state": "active",
-    "use_count": 52,
-    "view_count": 34
+    "use_count": 54,
+    "view_count": 35
   },
   "api-secret-hygiene": {
     "archived_at": null,
@@ -105,15 +105,15 @@
     "created_at": "2026-08-15T08:49:28.873640+00:00",
     "created_by": "agent",
     "last_patched_at": "2026-08-16T07:43:32.005980+00:00",
-    "last_reused_patch_generation": 5,
-    "last_used_at": "2026-08-16T07:43:22.844707+00:00",
-    "last_viewed_at": "2026-08-16T07:43:22.841805+00:00",
+    "last_reused_patch_generation": 6,
+    "last_used_at": "2026-08-17T00:26:03.075208+00:00",
+    "last_viewed_at": "2026-08-17T00:26:03.071882+00:00",
     "patch_count": 17,
     "patch_generation": 6,
     "pinned": false,
     "state": "active",
-    "use_count": 13,
-    "view_count": 13
+    "use_count": 14,
+    "view_count": 14
   },
   "drafting-authentic-reviews": {
     "archived_at": null,
@@ -263,20 +263,35 @@
     "use_count": 1,
     "view_count": 1
   },
+  "grounded-citations": {
+    "archived_at": null,
+    "created_at": "2026-08-17T03:11:47.499285+00:00",
+    "created_by": null,
+    "last_patched_at": null,
+    "last_reused_patch_generation": 0,
+    "last_used_at": "2026-08-17T03:11:47.500886+00:00",
+    "last_viewed_at": "2026-08-17T03:11:47.499301+00:00",
+    "patch_count": 0,
+    "patch_generation": 0,
+    "pinned": false,
+    "state": "active",
+    "use_count": 1,
+    "view_count": 1
+  },
   "hermes-agent": {
     "archived_at": null,
     "created_at": "2026-08-14T12:30:59.441420+00:00",
     "created_by": null,
     "last_patched_at": null,
     "last_reused_patch_generation": 0,
-    "last_used_at": "2026-08-16T04:22:20.356819+00:00",
-    "last_viewed_at": "2026-08-16T04:22:20.354388+00:00",
+    "last_used_at": "2026-08-17T00:26:03.076659+00:00",
+    "last_viewed_at": "2026-08-17T00:26:03.073942+00:00",
     "patch_count": 0,
     "patch_generation": 0,
     "pinned": false,
     "state": "active",
-    "use_count": 15,
-    "view_count": 15
+    "use_count": 16,
+    "view_count": 16
   },
   "hermes-agent-display": {
     "archived_at": null,
@@ -424,16 +439,16 @@
     "archived_at": null,
     "created_at": "2026-08-14T13:35:48.546712+00:00",
     "created_by": "agent",
-    "last_patched_at": null,
+    "last_patched_at": "2026-08-17T03:04:18.021783+00:00",
     "last_reused_patch_generation": 0,
-    "last_used_at": null,
-    "last_viewed_at": null,
-    "patch_count": 0,
-    "patch_generation": 0,
+    "last_used_at": "2026-08-17T03:03:48.749481+00:00",
+    "last_viewed_at": "2026-08-17T03:03:48.747224+00:00",
+    "patch_count": 2,
+    "patch_generation": 2,
     "pinned": false,
     "state": "active",
-    "use_count": 0,
-    "view_count": 0
+    "use_count": 2,
+    "view_count": 2
   },
   "project-readme-status": {
     "archived_at": null,
