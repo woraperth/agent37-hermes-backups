@@ -17,3 +17,5 @@ User prefers concise, concrete explanations of Git status and uncommitted change
 Thai DataTH newsletters: refer to the author as “แอดเพิร์ธ” every time; use teaser-led copy with an unanswered question and no spoiler of the article’s main conclusion.
 §
 Moosend campaigns are draft-only: prepare and label campaigns, never schedule or send; separate Newsletter and Marketing with campaign labels.
+§
+Tech Cafe posts: Perth prefers Thai copy that feels like chatting with friends from a real user's perspective—open with context and personal opinion, list key features with practical examples, compare with familiar tools/problems, cover pros, cons, and price, mention personal experience, use light humor, and end with a link plus a question inviting discussion.
