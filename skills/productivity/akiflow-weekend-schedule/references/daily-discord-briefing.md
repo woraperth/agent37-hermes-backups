@@ -16,9 +16,13 @@ Fires `0 21 * * *` UTC = 7:00 Australia/Sydney (Sydney is UTC+10 Aug–Sep; DST 
 ## Perth's preferred format (final, user-confirmed)
 Message = one Discord message:
 1. Line 1: BIG date header exactly once: `# 🗓️ Saturday 15 Aug 2026 Sydney` (no space issues after `#`).
-2. Line 2: one-sentence day summary: `— <summary>`.
+2. Line 2: one-sentence day summary: `— <summary>`; do not estimate capacity because Akiflow's calendar blocking already shows fit.
 3. Blank line.
-4. **Two categories of task, handled differently:**
+4. **Three categories of task, handled differently:**
+   - **DEEP WORK**: substantial creation, migration, configuration, or research. Use the full compact card and end with a specific first action that can be started immediately.
+   - **QUICK WINS**: short admin, posting, follow-up, or communication. Use the full compact card, with brief context and a concrete first action.
+   - **ROUTINE**: workouts, Daily Shutdown, and similar habits. Use a bare name + time line only.
+5. **Task categories then render as follows:**
    - **WORKOUT + simple habit tasks (🏋️ Workout, 🌙 Daily Shutdown): render as a BARE one-liner — ONLY the name + time, nothing else.** NO context, NO 📱/💻, NO steps, NO start-now, NO "· mobile, just go". E.g. `**🏋️ Workout** · 09:00`. The user was explicit: "no context, device, steps, start now thing".
    - **ALL other tasks: keep the FULL 4-part card** (context, device, steps, start-now), compact; flag overdue HIGH with 🚨 + missed date; merge recurring slots (3× Book CH8) into one block.
 5. LAST line: blank line then `──────────────` separator, so consecutive days are visually distinct.
