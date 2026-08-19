@@ -75,6 +75,16 @@ After fetching the transcript, format it based on what the user asks for:
 4. **Transform** into the requested output format. If the user did not specify a format, default to a summary.
 5. **Verify**: re-read the transformed output to check for coherence, correct timestamps, and completeness before presenting.
 
+## Provider fallback
+
+Use Supadata first when configured, because it is the primary transcript provider. If Supadata is unavailable, exhausted, or returns a quota/rate-limit error, fall back to the no-key endpoint:
+
+```text
+https://youtube-transcript.ai/transcript/{VIDEO_ID}.txt
+```
+
+This returns timestamped Markdown. It may contain repeated phrases from auto-generated captions, so deduplicate obvious repeated segments before summarizing. Reuse an already retrieved transcript instead of making another provider call.
+
 ## Error Handling
 
 - **Transcript disabled**: tell the user; suggest they check if subtitles are available on the video page.
