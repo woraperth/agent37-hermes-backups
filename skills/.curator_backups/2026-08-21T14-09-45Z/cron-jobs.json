@@ -1,0 +1,305 @@
+{
+  "jobs": [
+    {
+      "id": "ff650e47fee9",
+      "name": "sync-icloud-vault",
+      "prompt": "Deterministic git sync handled by sync-icloud-vault.sh; do not invoke an agent.",
+      "skills": [],
+      "skill": null,
+      "model": "gpt-5.6-luna",
+      "provider": "openai-codex",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "sync-icloud-vault.sh",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/30 * * * *",
+        "display": "*/30 * * * *"
+      },
+      "schedule_display": "*/30 * * * *",
+      "repeat": {
+        "times": null,
+        "completed": 434
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-14T13:17:46.195797+00:00",
+      "next_run_at": "2026-08-21T14:30:00+00:00",
+      "last_run_at": "2026-08-21T14:00:04.140713+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "discord",
+        "chat_id": "1537810581791441070",
+        "chat_name": "Perth Hermes / #dev / I have Obsidian vault in GitHub. Can you connect to it",
+        "thread_id": "1537810581791441070",
+        "user_id": "905425169244389377"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "6a11dd48d772",
+      "name": "Back up Hermes memory and skills to git",
+      "prompt": "Deterministic Hermes backup handled by backup-hermes-state.sh; do not invoke an agent.",
+      "skills": [],
+      "skill": null,
+      "model": "gpt-5.6-luna",
+      "provider": "openai-codex",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "backup-hermes-state.sh",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 480,
+        "display": "every 480m"
+      },
+      "schedule_display": "every 480m",
+      "repeat": {
+        "times": null,
+        "completed": 23
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-14T14:08:58.787492+00:00",
+      "next_run_at": "2026-08-21T20:28:03.656229+00:00",
+      "last_run_at": "2026-08-21T12:28:03.656229+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": null,
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "1f1ccad8dac5",
+      "name": "Daily 7am Sydney Akiflow schedule + second brain briefing",
+      "prompt": "Create Perth888's daily 7:00am Sydney morning briefing from Akiflow and the Obsidian second brain.\n\nSOURCE AND DATE\n- Resolve today's Sydney date with `TZ=Australia/Sydney date \"+%Y-%m-%d %A\"`. Use that date for Akiflow and `~/ICloud-vault/Diary/<date>.md`; never use the plain UTC date.\n- Fetch today's Akiflow schedule with entities `all`, including tasks and events. Do not modify, reschedule, complete, or delete anything.\n- Exclude the standing `Week priorities` task from the briefing.\n- For important non-routine tasks, search the mapped project folder under `~/ICloud-vault/Projects/` and the relevant diary/project notes. Read the 1-2 most relevant notes before writing. Never invent context. Do not enrich every trivial task.\n\nACTIONABILITY RULES\n- Every non-routine task must end with a genuinely executable `▶️ start now` action. It must be the smallest concrete action that can begin immediately, preferably something that takes under two minutes, such as opening the relevant deck, locating the next unfinished lesson, creating the draft, or listing the required fields. Do not write vague actions like `start task`, `work on slides`, or `continue migration`.\n- Keep the task's detailed context grounded in the second brain: current state, why it matters, blockers, decisions, names, dates, amounts, or links when available. Context should help Perth decide how to act, not merely restate the task title.\n- Use device guidance only when useful: `💻 Laptop` for editing, spreadsheets, course platforms, slides, or configuration; `📱 Mobile` for drafting, posting, messaging, or lightweight review.\n- Keep steps short and practical. Combine device, steps, and start-now on one line to preserve space.\n\nTASK CATEGORIES\n- Deep work: substantial creation, migration, configuration, or research tasks. Render with the full compact card.\n- Quick wins: short admin, posting, follow-up, or communication tasks. Render with the full compact card, but keep context and steps brief.\n- Routine: workouts, Daily Shutdown, and similar GOAL/habit tasks. Render as a bare line with ONLY the task name and time, for example `**🏋️ Workout** · 09:00` or `**🌙 Daily Shutdown** · 23:15`. Do not add context, device, steps, or start-now text.\n- Merge recurring slots of the same task into one block, showing the times inline.\n- Flag overdue HIGH tasks with `🚨` and the missed date.\n\nOUTPUT FORMAT AND HARD LIMIT\n- The final response is posted verbatim to Discord. It must contain ONLY the briefing: no preamble, process narration, checklist of work performed, character count, verification note, or trailing commentary.\n- The very first character must be `#`, specifically the date header. Do not begin with any sentence before it.\n- Keep the entire message under 1,950 characters so Discord does not truncate it.\n- Use exactly this structure:\n\n# 🗓️ <Day> <D> <Mon> <Year> Sydney\n<one short sentence summarising the day, without estimating capacity>\n\n🔥 Deep work\n**<emoji> <task>** · <time>\n📌 <2-4 short sentences of grounded, useful context>\n💻 Laptop or 📱 Mobile · 📋 <short steps> · ▶️ <specific first action>\n\n⚡ Quick wins\n**<emoji> <task>** · <time>\n📌 <brief useful context>\n💻 Laptop or 📱 Mobile · 📋 <short steps> · ▶️ <specific first action>\n\n🧘 Routine\n**🏋️ Workout** · <time>\n**🌙 Daily Shutdown** · <time>\n\n- Omit any category with no items.\n- Use the actual task emoji and title when available.\n- The heading must appear exactly once. End with a blank line followed by `──────────────`.\n- Prioritise useful context and specific first actions over verbose summaries. If space is tight, shorten the day summary and steps before cutting grounded context or the start-now action.",
+      "skills": [
+        "akiflow-weekend-schedule"
+      ],
+      "skill": "akiflow-weekend-schedule",
+      "model": "gpt-5.6-luna",
+      "provider": "openai-codex",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 21 * * *",
+        "display": "0 21 * * *"
+      },
+      "schedule_display": "0 21 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 23
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-14T14:51:24.833773+00:00",
+      "next_run_at": "2026-08-21T21:00:00+00:00",
+      "last_run_at": "2026-08-20T21:01:57.145232+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "discord:1537826281142484992",
+      "origin": {
+        "platform": "discord",
+        "chat_id": "1537835921406300281",
+        "chat_name": "Perth Hermes / #dev / Do this everyday at 7am (Sydney timezone). check my schedule for today (Sydne...",
+        "thread_id": "1537835921406300281",
+        "user_id": "905425169244389377"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "194cfb56fa1a",
+      "name": "sync-nat-second-brain",
+      "prompt": "Sync Nat's second-brain GitHub repo (private, accessed via read-only deploy key through the SSH alias github.com-nat-sb) to ~/nat-second-brain. The sync script runs first and its output is injected. If the script reports new/changed content (file count increased), briefly summarize what's new in the vault so it's available for the user. If nothing changed, keep it minimal. This is a background read-only sync; never push or modify the remote.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "sync-nat-second-brain.sh",
+      "no_agent": true,
+      "monitor_script": null,
+      "monitor_url": null,
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/30 * * * *",
+        "display": "*/30 * * * *"
+      },
+      "schedule_display": "*/30 * * * *",
+      "repeat": {
+        "times": null,
+        "completed": 319
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-14T22:51:05.475556+00:00",
+      "next_run_at": "2026-08-21T14:30:00+00:00",
+      "last_run_at": "2026-08-21T14:00:06.048348+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "discord",
+        "chat_id": "1537954313102557277",
+        "chat_name": "Perth Hermes / #dev / เปลี่ยนนิสัยเป็นตอบแบบสนุก ๆ เรียบร้อย ห้ามด่ากลับ",
+        "thread_id": "1537954313102557277",
+        "user_id": "905425169244389377"
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "050b8aeec814",
+      "name": "Sunday Inputs digest (keep/archive/content)",
+      "prompt": "Sunday Inputs digest (deterministic script — emits exact digest starting at #, delivered verbatim)",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "sunday_inputs_digest.py",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 22 * * 6",
+        "display": "0 22 * * 6"
+      },
+      "schedule_display": "0 22 * * 6",
+      "repeat": {
+        "times": null,
+        "completed": 6
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-15T08:47:58.033739+00:00",
+      "next_run_at": "2026-08-22T22:00:00+00:00",
+      "last_run_at": "2026-08-15T22:00:09.120526+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "discord:1538108392940376155",
+      "origin": {
+        "platform": "discord",
+        "chat_id": "1538106787327381504",
+        "chat_name": "Penny Assistance / #dev / idea 5 sounds good. Can you reply in the thread",
+        "thread_id": "1538106787327381504",
+        "user_id": "905425169244389377"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "974172731c6a",
+      "name": "Sunday DataTH RSS newsletter draft",
+      "prompt": "Every Sunday at 07:00 Australia/Sydney, when the monitored DataTH RSS feed has changed, check the latest RSS item and create a Moosend draft campaign only if that article has not already been processed.\n\nSource and account:\n- RSS: https://blog.datath.com/feed/\n- Blog article base: https://blog.datath.com\n- Moosend target list: DataTH Blog Subscribers, ID 897ff1a8-1415-428c-b879-76302577bbc5\n- Approved sender and reply-to: perth@datath.com\n- Visual template source campaign: Moosend campaign ID 724964b3-5534-4b67-a6c4-4e289ca83121. Retrieve its HTML with GET /v3/campaigns/{id}/view.json. Preserve the header title block, responsive structure, typography, spacing, and unsubscribe footer. Replace only the two responsive main-body copies.\n\nProcedure:\n1. Fetch and parse the RSS feed with Python/urllib. Use the newest item's guid as the stable article ID and its canonical link as fallback.\n2. Prevent duplicates using /home/node/newsletter-template/datath-newsletter-processed.json. If the guid or link is recorded, do nothing. Also check existing Moosend campaigns when practical. Record the item only after successful draft creation.\n3. Fetch the article URL and article HTML. Extract its OG/banner image URL. Generate a Thai teaser that sells the click: introduce the relatable problem, reveal only one intriguing insight, leave the main answer/conclusion unrevealed, and include a clear CTA. Do not spoil the article.\n4. Set the email subject exactly to `[บทความใหม่ DataTH] <article name>`.\n5. Set the email subtitle to one concise teaser question that creates curiosity and is not a full summary.\n6. In the body, after `สวัสดีครับ`, add exactly: `ขอแนะนำบทความใหม่ล่าสุด จาก DataTH ที่คนที่สนใจสาย Data & AI น่าจะได้ประโยชน์กัน`\n7. Whenever the author is mentioned in Thai, write exactly `แอดเพิร์ธ`.\n8. Replace the in-email header in both responsive title copies with exactly `[บทความใหม่] <article name>`; do not use only the article name. Replace the template's top article image source with the extracted OG/banner image and set its surrounding link to the article URL. Replace only the two responsive main-body copies. Use the CTA exactly as `👉 อ่านบทความเต็ม:` followed by the full article URL on the next line, displayed as a visible URL so older email clients can read/copy it. Keep `#unsubscribeLink#` in the footer.\n9. Create a regular Moosend campaign with a name like `[Newsletter] YYYY-MM-DD — <article title> (Article banner + URL)`, the exact subject above, SenderEmail perth@datath.com, ReplyToEmail perth@datath.com, ConfirmationToEmail perth@datath.com, IsAB false, HTMLContent or WebLocation as needed, and MailingLists [{\"MailingListID\":\"897ff1a8-1415-428c-b879-76302577bbc5\",\"SegmentID\":0}]. Prefer the verified public template URL method if direct HTMLContent is rejected.\n10. Verify the returned campaign with /v3/campaigns/{campaign_id}/view.json: Status draft, ScheduledFor null, DeliveredOn null, correct target list, article URL present, banner image present, exact subject, subtitle question, `[บทความใหม่]` heading, visible URL CTA, and unsubscribe token present. Then record guid, link, campaign ID, and created timestamp in the state JSON.\n\nHard safety rules:\n- Draft creation only. Never call Moosend test, schedule, send, delete, or subscriber/list mutation endpoints.\n- Never delete previous draft campaigns.\n- If a prerequisite is missing or article fetch fails, do not create a partial campaign; report the reason.\n- Deliver a concise notification as a new message in the configured Discord channel <#1537826281142484992>: state whether a new article was found and, if created, provide campaign ID, title, audience, and confirmation it remains draft. No raw API key, HTML, or verbose logs.",
+      "skills": [
+        "moosend",
+        "web-article-summarization"
+      ],
+      "skill": "moosend",
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "openai-codex",
+      "model_snapshot": "gpt-5.6-luna",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "monitor_script": null,
+      "monitor_url": "https://blog.datath.com/feed/",
+      "monitor_state": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 21 * * 6",
+        "display": "0 21 * * 6"
+      },
+      "schedule_display": "0 21 * * 6",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-08-16T06:46:53.563490+00:00",
+      "next_run_at": "2026-08-22T21:00:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "discord:1537826281142484992",
+      "origin": {
+        "platform": "discord",
+        "chat_id": "1538393995623801053",
+        "chat_name": "Penny Assistance / #dev / AI content datath new article -> email automation",
+        "thread_id": "1538393995623801053",
+        "user_id": "905425169244389377"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null
+    }
+  ],
+  "updated_at": "2026-08-21T14:00:06.048829+00:00"
+}
