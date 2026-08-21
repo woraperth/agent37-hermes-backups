@@ -20,13 +20,13 @@
     "created_by": "agent",
     "last_patched_at": "2026-08-19T16:40:19.471400+00:00",
     "last_reused_patch_generation": 32,
-    "last_used_at": "2026-08-19T21:00:04.744136+00:00",
+    "last_used_at": "2026-08-20T21:00:14.332323+00:00",
     "last_viewed_at": "2026-08-19T16:35:13.249533+00:00",
     "patch_count": 37,
     "patch_generation": 32,
     "pinned": false,
     "state": "active",
-    "use_count": 58,
+    "use_count": 59,
     "view_count": 36
   },
   "api-secret-hygiene": {
